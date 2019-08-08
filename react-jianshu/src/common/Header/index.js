@@ -1,7 +1,7 @@
 import React, { Component }from 'react';
 import { connect } from 'react-redux'
 import { CSSTransition } from 'react-transition-group'
-import { searchFocus, getList } from './store/actionCreators'
+import { searchFocus, getList, mouseEnter, mouseLeave, changePage } from './store/actionCreators'
 import {
     HeaderWrapper,
     Logo,
@@ -19,18 +19,30 @@ import {
 } from './style'
 class Header extends React.Component {
     getListArea = () => {
-        if(this.props.focused){
+        const { focused, list, page, totalPage, mouseIn, handleMouseEnter, handleMouseLeave, handleChangePage } = this.props
+        const pageList = list.toJS().slice((page - 1) * 10, page * 10)
+        if(focused || mouseIn){
             return (
-                <SearchInfo>
+                <SearchInfo 
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                >
                     <SearchInfoTitle>
                         热门搜索
-                        <SearchInfoSwitch>换一批</SearchInfoSwitch>
+                        <SearchInfoSwitch onClick={() => handleChangePage(page, totalPage, this.spinIcon)}>
+                            <i ref={(icon) => {this.spinIcon = icon}} className="iconfont spin">&#xe851;</i>
+                            换一批
+                        </SearchInfoSwitch>
                     </SearchInfoTitle>
                     <SearchInfoList>                     
                         {
-                            this.props.list.map(item => {
+                            pageList.map(item => {
                                 return <SearchInfoItem key={item}>{item}</SearchInfoItem>
                             })
+                            // [
+                            //     <SearchInfoItem>0</SearchInfoItem>,
+                            //     <SearchInfoItem>2</SearchInfoItem>
+                            // ]
                         }
                     </SearchInfoList>
                 </SearchInfo>
@@ -40,7 +52,7 @@ class Header extends React.Component {
         }
     }
     render() {
-        
+        const { focused, list, handleInputFocus } = this.props
         return (  
             <HeaderWrapper>
                 <Logo/>
@@ -53,17 +65,17 @@ class Header extends React.Component {
                     </NavItem>
                     <SearchWrapper>
                         <CSSTransition
-                            in={this.props.focused}
+                            in={focused}
                             timeout={200}
                             classNames='slider'
                         >
                             <NavSearch
-                                className={this.props.focused ? 'focused' : ''}
-                                onFocus={this.props.handleInputFocus}  
-                                onBlur={this.props.handleInputFocus}                      
+                                className={focused ? 'focused' : ''}
+                                onFocus={() => handleInputFocus(list.toJS())}  
+                                onBlur={() => handleInputFocus(list.toJS())}                      
                             ></NavSearch>
                         </CSSTransition>    
-                        <i className={this.props.focused ? 'focused iconfont' : 'iconfont'}>&#xe614;</i>
+                        <i className={focused ? 'focused iconfont zoom' : 'iconfont zoom'}>&#xe614;</i>
                         {this.getListArea()}
                         {/* <SearchInfo>
                             <SearchInfoTitle>
@@ -96,14 +108,34 @@ class Header extends React.Component {
 const mapStateToProps = (state) => {
     return {
         focused: state.getIn(['header', 'focused']),
-        list: state.getIn(['header', 'list'])
+        list: state.getIn(['header', 'list']),
+        page: state.getIn(['header', 'page']),
+        totalPage: state.getIn(['header', 'totalPage']),
+        mouseIn: state.getIn(['header', 'mouseIn'])
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        handleInputFocus(){
-            dispatch(getList())
+        handleInputFocus(list){   
+            if(!list.length){                        
+                dispatch(getList())
+            }    
             dispatch(searchFocus())
+        },
+        handleMouseEnter(){
+            dispatch(mouseEnter())
+        },
+        handleMouseLeave(){
+            dispatch(mouseLeave())
+        },
+        handleChangePage(page, totalPage, spin){
+            let rotateAngle = parseInt(spin.style.transform.replace(/[^0-9]/ig, ''), 10) || 0
+            spin.style.transform = `rotate(${ rotateAngle + 360 }deg)`
+            if(page < totalPage){
+                dispatch(changePage(page + 1))
+            }else{
+                dispatch(changePage(1))
+            }
         }
     }
 }
