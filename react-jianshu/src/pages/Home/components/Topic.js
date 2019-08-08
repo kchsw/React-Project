@@ -24,5 +24,11 @@ class Topic extends Component {
         );
     }
 }
+
+const mapState (state) => {
+    return {
+
+    }
+}
  
-export default connect()(Topic) ;
+export default connect(mapState, null)(Topic) ;
