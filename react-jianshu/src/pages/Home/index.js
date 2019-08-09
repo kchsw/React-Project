@@ -3,6 +3,7 @@ import Topic from './components/Topic'
 import List from './components/List'
 import Recommend from './components/Recommend'
 import Writer from './components/Writer'
+import { connect } from 'react-redux'
 import {
     HomeWrapper,
     HomeLeft,
@@ -30,6 +31,14 @@ class Home extends Component {
             </HomeWrapper>
         );
     }
+    componentDidMount(){
+
+    }
 }
- 
-export default Home;
+
+const mapDispatch = (dispatch) => {
+    return {
+
+    }
+}
+export default connect(null, mapDispatch)(Home);
