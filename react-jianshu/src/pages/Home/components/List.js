@@ -19,7 +19,7 @@ class List extends Component {
                 {
                     this.props.aticleList.map((item, index) => {
                         return (
-                            <Link key={item.get('id') + index} to='/detail'> 
+                            <Link key={item.get('id') + index} to={ '/detail/' + item.get('id') }> 
                                 <ListItem>
                                     <img className="list-img" src={item.get('imgUrl')}/>
                                     <ListInfo>

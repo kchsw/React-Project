@@ -2,6 +2,8 @@ import React, { Component }from 'react';
 import { connect } from 'react-redux'
 import { CSSTransition } from 'react-transition-group'
 import { searchFocus, getList, mouseEnter, mouseLeave, changePage } from './store/actionCreators'
+import { logout } from '../../pages/Login/store/actionCreators'
+import { Link } from 'react-router-dom'
 import {
     HeaderWrapper,
     Logo,
@@ -52,14 +54,17 @@ class Header extends React.Component {
         }
     }
     render() {
-        const { focused, list, handleInputFocus } = this.props
+        const { focused, list, handleInputFocus, logined, logout } = this.props
         return (  
             <HeaderWrapper>
                 <Logo/>
                 <Nav>
                     <NavItem className="left active">首页</NavItem>
                     <NavItem className="left">下载App</NavItem>
-                    <NavItem className="right">登陆</NavItem>
+                    {
+                        logined ? <NavItem className="right" onClick={logout}>退出</NavItem> : 
+                        <Link to="/login"><NavItem className="right">登陆</NavItem></Link>
+                    }
                     <NavItem className="right">
                         <i className="iconfont">&#xe636;</i>
                     </NavItem>
@@ -94,10 +99,12 @@ class Header extends React.Component {
                     </SearchWrapper>
                 </Nav>
                 <Addition>
-                    <Button className="writting">
-                        <i className="iconfont">&#xe615;</i>
-                        写文章
-                    </Button>
+                    <Link to="/write">
+                        <Button className="writting">
+                            <i className="iconfont">&#xe615;</i>
+                            写文章
+                        </Button>
+                    </Link>
                     <Button className="reg">注册</Button>
                 </Addition>
             </HeaderWrapper>
@@ -111,7 +118,8 @@ const mapStateToProps = (state) => {
         list: state.getIn(['header', 'list']),
         page: state.getIn(['header', 'page']),
         totalPage: state.getIn(['header', 'totalPage']),
-        mouseIn: state.getIn(['header', 'mouseIn'])
+        mouseIn: state.getIn(['header', 'mouseIn']),
+        logined: state.getIn(['login', 'logined'])
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -136,6 +144,9 @@ const mapDispatchToProps = (dispatch) => {
             }else{
                 dispatch(changePage(1))
             }
+        },
+        logout(){
+            dispatch(logout())
         }
     }
 }
