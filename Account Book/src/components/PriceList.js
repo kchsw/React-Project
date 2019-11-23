@@ -21,7 +21,7 @@ const PriceList = ({ items, onModifuItem, onDeleteItem }) => {
                                 icon={item.category.iconName}
                             />
                         </span>
-                        <span className="col-5">
+                        <span className="col-5 title-col">
                             {item.title}
                         </span>
                         <span className="col-2 font-weight-bold">

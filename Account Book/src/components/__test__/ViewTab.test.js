@@ -20,6 +20,7 @@ describe('test ViewTab component', () => {
 
     it('render the correct actived tab', () => {
        expect(wrapper.find('.list-item .nav-link').first().hasClass('active')).toBeTruthy()
+       expect(wrapper.find('.chart-item').length).toEqual(0)
     })
     it('should trigger the correct function callbacks', () => {
         wrapper.find('.chart-item .nav-link').first().simulate('click')
