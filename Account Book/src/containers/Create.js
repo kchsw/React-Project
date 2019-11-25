@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import CategorySelect from '../components/CategorySelect'
 import PriceForm from '../components/PriceForm'
+import { Tabs, Tab } from '../components/Tabs'
+import { TYPE_INCOME, TYPE_OUTCOME } from '../utility'
+import Ionicon from 'react-ionicons'
+
 
 export const categories = [
     {
@@ -104,7 +108,9 @@ export const categories = [
 class Create extends Component {
     constructor(props) {
         super(props);
-        this.state = {  }
+        this.state = {  
+
+        }
     }
     render() { 
         const { match } = this.props
@@ -112,6 +118,26 @@ class Create extends Component {
             <div className="card" style={{width: '65%', margin: '0 auto'}}>
                 <div className="card-body">
                     <div className="content-area">
+                        <Tabs activeIndex={0} onTabChange={() => {}}>
+                          <Tab>
+                            <Ionicon
+                              className="rounded-circle mr-2"
+                              fontSize="25px"
+                              color={'#007bff'}
+                              icon="ios-add-circle"
+                            />
+                            收入
+                          </Tab>
+                          <Tab>
+                            <Ionicon
+                              className="rounded-circle mr-2"
+                              fontSize="25px"
+                              color={'#007bff'}
+                              icon="ios-close-circle"
+                            />
+                            支出
+                          </Tab>
+                        </Tabs>
                         <CategorySelect categories={categories} 
                             selectedCategory={categories[0]}
                             onSelectCategory={() => {}}
