@@ -4,121 +4,65 @@ import PriceForm from '../components/PriceForm'
 import { Tabs, Tab } from '../components/Tabs'
 import { TYPE_INCOME, TYPE_OUTCOME } from '../utility'
 import Ionicon from 'react-ionicons'
+import WithContext from '../WithContext'
+import { withRouter } from 'react-router-dom'
 
 
-export const categories = [
-    {
-        "name": "旅行",
-        "iconName": "ios-plane",
-        "id": "1",
-        "type": "outcome"
-      },
-      {
-        "name": "餐饮",
-        "iconName": "ios-restaurant",
-        "id": "2",
-        "type": "outcome"
-      },
-      {
-        "name": "购物",
-        "iconName": "ios-basket",
-        "id": "3",
-        "type": "outcome"
-      },
-      {
-        "name": "数码",
-        "iconName": "ios-phone-portrait",
-        "id": "4",
-        "type": "outcome"
-      },
-      {
-        "name": "交通",
-        "iconName": "ios-train",
-        "id": "5",
-        "type": "outcome"
-      },
-      {
-        "name": "娱乐",
-        "iconName": "ios-beer",
-        "id": "6",
-        "type": "outcome"
-      },
-      {
-        "name": "汽车",
-        "iconName": "ios-car",
-        "id": "7",
-        "type": "outcome"
-      },
-      {
-        "name": "医疗",
-        "iconName": "ios-medkit",
-        "id": "8",
-        "type": "outcome"
-      },
-      {
-        "name": "体育",
-        "iconName": "ios-football",
-        "id": "14",
-        "type": "outcome"
-      },
-      {
-        "name": "宠物",
-        "iconName": "ios-paw",
-        "id": "9",
-        "type": "outcome"
-      },
-      {
-        "name": "其他",
-        "iconName": "ios-apps",
-        "id": "18",
-        "type": "outcome"
-      },
-      {
-        "name": "工资",
-        "iconName": "ios-card",
-        "id": "10",
-        "type": "income"
-      },
-      {
-        "name": "兼职",
-        "iconName": "ios-cash",
-        "id": "11",
-        "type": "income"
-      },
-      {
-        "name": "理财",
-        "iconName": "logo-yen",
-        "id": "12",
-        "type": "income"
-      },
-      {
-        "name": "奖金",
-        "iconName": "md-trophy",
-        "id": "13",
-        "type": "income"
-      },
-      {
-        "name": "其他",
-        "iconName": "ios-apps",
-        "id": "15",
-        "type": "income"
-      }
-]
+const tabsText = [ TYPE_INCOME, TYPE_OUTCOME ]
 
 class Create extends Component {
     constructor(props) {
         super(props);
+        const { items, categories } = props.data
+        const { id } = props.match.params
         this.state = {  
-
+          tabView: (id && items[id]) ? categories[items[id].cid].type : TYPE_INCOME,
+          selectedCategory: (id && items[id]) ? categories[items[id].cid] : null
         }
     }
+    componentDidMount(){
+      const { id } = this.props.match.params
+      this.props.actions.getEditData(id).then(data => {
+        const { categories, editItem } = data
+        this.setState({  
+          tabView: (id && editItem) ? categories[editItem.cid].type : TYPE_INCOME,
+          selectedCategory: (id && editItem) ? categories[editItem.cid] : null
+        })
+      })
+    }
+    changeView = (index) => {
+        this.setState({
+            tabView: tabsText[index]
+        })
+    }
+    cancelSubmit = () => {
+      this.props.history.push('/')
+    }
+    submitForm = (data, editMode) => {
+      if(!editMode){
+        this.props.actions.createItem(data, this.state.selectedCategory.id)
+      }else{
+        this.props.actions.updateItem(data, this.state.selectedCategory.id)
+      }
+      this.props.history.push('/')
+    }
+    selectCategory = (category) => {
+      this.setState({
+        selectedCategory: category
+      })
+    }
     render() { 
-        const { match } = this.props
+        const { match, data } = this.props
+        const { items, categories } = data
+        const { id } = this.props.match.params
+        const editItem = (id && items[id]) ? items[id] : {}
+        const tabIndex = tabsText.findIndex(text => text === this.state.tabView)
+        const filterCategories = Object.values(categories).filter(category => category.type === this.state.tabView)
         return (  
             <div className="card" style={{width: '65%', margin: '0 auto'}}>
                 <div className="card-body">
                     <div className="content-area">
-                        <Tabs activeIndex={0} onTabChange={() => {}}>
+                        <Tabs activeIndex={tabIndex} onTabChange={this.changeView}>
                           <Tab>
                             <Ionicon
                               className="rounded-circle mr-2"
@@ -138,11 +82,15 @@ class Create extends Component {
                             支出
                           </Tab>
                         </Tabs>
-                        <CategorySelect categories={categories} 
-                            selectedCategory={categories[0]}
-                            onSelectCategory={() => {}}
+                        <CategorySelect categories={filterCategories} 
+                            selectedCategory={this.state.selectedCategory}
+                            onSelectCategory={this.selectCategory}
                         />
-                        <PriceForm />
+                        <PriceForm 
+                          onFormSubmit={this.submitForm}
+                          onCancelSubmit={this.cancelSubmit}
+                          item={editItem}
+                        />
                     </div>
                 </div>
             </div>
@@ -150,4 +98,4 @@ class Create extends Component {
     }
 } 
  
-export default Create;
+export default withRouter(WithContext(Create));

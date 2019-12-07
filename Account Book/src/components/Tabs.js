@@ -4,18 +4,18 @@ export class Tabs extends Component {
     constructor(props) {
         super(props);
         this.state = {  
-            activeIndex: props.activeIndex
+            // activeIndex: props.activeIndex
         }
     }
     tabChange = (event, index) => {
         event.preventDefault()
-        this.setState({
-            activeIndex: index
-        })
+        // this.setState({
+        //     activeIndex: index
+        // })
         this.props.onTabChange(index)
     }
     render() { 
-        const { activeIndex } = this.state
+        const { activeIndex } = this.props
         const { children } = this.props
         return (  
             <ul className="nav nav-tabs nav-fill my-4">

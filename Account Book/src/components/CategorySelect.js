@@ -5,20 +5,14 @@ import { Colors } from '../utility'
 class CategorySelect extends Component {
     constructor(props) {
         super(props);
-        this.state = {  
-            selectedCategoryId: this.props.selectedCategory.id
-        }
     }
     selectCategory = (event, category) => {
         event.preventDefault();
-        this.setState({
-            selectedCategoryId: category.id
-        })
         this.props.onSelectCategory(category)
     }
     render() { 
         const { categories, selectedCategory } = this.props
-        const { selectedCategoryId } = this.state
+        const selectedCategoryId = selectedCategory && selectedCategory.id
         return (  
             <div className="category-select-component">
                 <label>收支类型</label>

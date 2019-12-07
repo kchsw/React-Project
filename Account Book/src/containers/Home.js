@@ -5,93 +5,79 @@ import ViewTab from '../components/ViewTab'
 import TotalPrice from '../components/TotalPrice'
 import MonthPicker from '../components/MonthPicker'
 import CreateBtn from '../components/CreateBtn'
-import { LIST_VIEW, CHART_VIEW, TYPE_INCOME, TYPE_OUTCOME, parseDate, padLeft } from '../utility'
+import { Tabs, Tab } from '../components/Tabs'
+import Ionicon from 'react-ionicons'
+import Loader from '../components/Loader'
+import PieChart from '../components/PieChart'
+import { LIST_VIEW, CHART_VIEW, TYPE_INCOME, TYPE_OUTCOME, parseDate, padLeft, Colors } from '../utility'
+import WithContext from '../WithContext'
+import { withRouter } from 'react-router-dom'
+    const tabsText = [LIST_VIEW, CHART_VIEW]
 
-export  const categorys = {
-    "1": {
-            "id": 1,
-            "name": "旅行",
-            "type": "outcome",
-            "iconName": "ios-plane"
-    },
-    "2": {
-        "id": 2,
-        "name": "理财",
-        "type": "income",
-        "iconName": "logo-yen"
-    }
-
-}
-export const mockData = [
-    {
-      "id": 1,
-      "title": "去云南旅行",
-      "date": "2019/11/10",
-      "price": 400,
-      "cid": 1
-    },
-    {
-      "id": 2,
-      "title": "理财基金",
-      "date": "2019/10/10",
-      "price": 400,
-      "cid": 2
-    }
-  ]
-
-const newItem = {
-        "id": 3,
-        "title": "新添加项目",
-        "date": "2019/11/10",
-        "price": 600,
-        "cid": 2
+    const generateChartDataByCategory = (items, type) => {
+        let categoryMap = {}
+        items.filter(item => item.category.type === type).forEach(item => {
+            if(categoryMap[item.cid]){
+                categoryMap[item.cid].value += (item.price * 1)
+                categoryMap[item.cid].items.push(item.id)
+            }else{
+                categoryMap[item.cid] = {
+                    name: item.category.name,
+                    value: item.price * 1,
+                    items: [item.id]
+                }
+            }
+        })
+        return Object.values(categoryMap)
     }
 
     class Home extends Component {
         constructor(props){
             super(props)
             this.state = {  
-                accountData: mockData,
-                currentData: parseDate(),
+                // accountData: mockData,
                 tabView: LIST_VIEW
             }
         }
-        changeView = (view) => {
+        componentDidMount(){
+            this.props.actions.getInitalData()
+        }
+        changeView = (index) => {
             this.setState({
-                tabView: view
+                tabView: tabsText[index]
             })
         }
         changeDate = (year, month) => {
-            this.setState({
-                currentData: { year, month }
-            })
+            this.props.actions.selectMonth(year, month)
         }
         modifyItem = (modifyiedItem) => {
-            this.state.accountData.find(item => item.id === modifyiedItem.id).title = "nmsl"
-            this.setState({
-                accountData: this.state.accountData
-            })
+            this.props.history.push(`/edit/${modifyiedItem.id}`)
         }
         createItem = () => {
-            this.setState({
-                // accountData: mockData.concat(newItem)
-                accountData: [newItem, ...this.state.accountData]
-            })
+            this.props.history.push('/create')
         }
         deleteItem = (deletedItem) => {
-            const filteredItems = this.state.accountData.filter(item => item.id !== deletedItem.id)
-            this.setState({
-                accountData: filteredItems
-            })
+            this.props.actions.deleteItem(deletedItem)
         }
         render() { 
-            let { accountData, currentData, tabView } = this.state
-            accountData = accountData.map(item => {
-                item.category = categorys[item.cid]
+            const { tabView } = this.state
+            const { data } = this.props
+            const { items, categories, currentData, isLoading  } = data
+            const accountData = Object.values(items).map(item => {
+                item.category = categories[item.cid]
                 return item
-            }).filter(item => {
-                return item.date.includes(`${currentData.year}/${padLeft(currentData.month)}`)
             })
+            const incomeChartData = generateChartDataByCategory(accountData, TYPE_INCOME)
+            const outcomeChartData = generateChartDataByCategory(accountData, TYPE_OUTCOME)
+            // .filter(item => {
+            //     return item.date.includes(`${currentData.year}-${padLeft(currentData.month)}`)
+            // })
+            // accountData = accountData.map(item => {
+            //     item.category = categorys[item.cid]
+            //     return item
+            // }).filter(item => {
+            //     return item.date.includes(`${currentData.year}/${padLeft(currentData.month)}`)
+            // })
             //这里直接对对象进行了操作
             // accountData.map(item => {
             //     item.category = categorys[item.cid]              
@@ -125,21 +111,57 @@ const newItem = {
                                 </div>
                             </div>
                             <div className="content-area">
-                                <ViewTab
+                                {/* <ViewTab
                                     activeTab={tabView}
                                     onTabChange={this.changeView}
-                                />
-                                <CreateBtn onClick={this.createItem} />
-                                {   tabView === LIST_VIEW &&
-                                    <PriceList 
-                                        items={accountData}
-                                        onModifuItem={this.modifyItem}
-                                        onDeleteItem={this.deleteItem}
+                                /> */}
+                                <Tabs activeIndex={0} onTabChange={this.changeView}>
+                                    <Tab>
+                                    <Ionicon
+                                        className="rounded-circle mr-2"
+                                        fontSize="25px"
+                                        color={'#007bff'}
+                                        icon="ios-paper"
                                     />
+                                    列表模式
+                                    </Tab>
+                                    <Tab>
+                                    <Ionicon
+                                        className="rounded-circle mr-2"
+                                        fontSize="25px"
+                                        color={'#007bff'}
+                                        icon="ios-pie"
+                                    />
+                                    图表模式
+                                    </Tab>
+                                </Tabs>
+                                <CreateBtn onClick={this.createItem} />
+                                {
+                                    !isLoading && 
+                                    <>
+                                        {   tabView === LIST_VIEW &&
+                                            <PriceList 
+                                                items={accountData}
+                                                onModifuItem={this.modifyItem}
+                                                onDeleteItem={this.deleteItem}
+                                            />
+                                        }
+                                        {
+                                            tabView === CHART_VIEW &&
+                                            <div className="row">
+                                                <div className="col-6">
+                                                    <PieChart title='本月收入' categoryData={incomeChartData}/>
+                                                </div>
+                                                <div className="col-6">
+                                                    <PieChart title='本月支出' categoryData={outcomeChartData}/>
+                                                </div>                                       
+                                            </div>
+                                        }
+                                    </>
                                 }
                                 {
-                                    tabView === CHART_VIEW &&
-                                    <div>图表区域</div>
+                                    isLoading && 
+                                    <Loader/>
                                 }
                             </div>
                         </div>
@@ -149,4 +171,4 @@ const newItem = {
         }
     }
    
-  export default Home;
+  export default withRouter(WithContext(Home));

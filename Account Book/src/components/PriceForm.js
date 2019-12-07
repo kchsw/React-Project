@@ -58,7 +58,7 @@ class PriceForm extends Component {
                         <label htmlFor="title-input">标题</label>
                         <input type="text" className="form-control" id="title-input" placeholder="请输入标题"
                             ref={(input) => {this.titleInput = input}}
-                            value={title}
+                            defaultValue={title}
                         />
                     </div>
                     <div className="form-group">
@@ -81,7 +81,7 @@ class PriceForm extends Component {
                         />
                     </div>
                     <button type="submit" className="btn btn-primary mr-3">提交</button>
-                    <button className="btn btn-secondary" onClick={() => {}}>取消</button>
+                    <button className="btn btn-secondary" onClick={this.props.onCancelSubmit}>取消</button>
                 </form>
                 {
                     !this.state.validated && 
