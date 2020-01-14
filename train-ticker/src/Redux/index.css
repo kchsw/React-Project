@@ -1,0 +1,67 @@
+.todo-list{
+    background: pink;
+    width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.control h1{
+    font-size: 60px;
+    margin: 0;
+    text-align: center;
+}
+
+.control .todo-input{
+    outline: none;
+    padding: 5px 5px 5px 10px;
+    font-size: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    /* line-height: 1.4rem; */
+    border: none;
+}
+
+.todos{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.todo-tiem{
+    margin: 10px 0;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    
+}
+.todo-tiem input{
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin: 0 20px;
+}
+
+.todo-tiem label{
+    flex: 1;
+    line-height: 1.2;
+    display: block;
+}
+
+.todo-tiem label.completed{
+    text-decoration: line-through;
+}
+
+.todo-tiem button{
+    display: block;
+    outline: none;
+    border: none;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 24px;
+    text-align: center;
+    padding: 0;
+    color:#fff;
+    background: pink;
+}
+

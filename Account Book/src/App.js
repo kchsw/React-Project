@@ -4,6 +4,7 @@ import Home from './containers/Home'
 import Create from './containers/Create'
 import { flatternArr, parseDate, ID } from './utility'
 // import { testCategories, testItems } from './testData'
+import { AppContext } from './AppContext'
 import {
   BrowserRouter as Router,
   Route,
@@ -11,7 +12,7 @@ import {
 } from "react-router-dom";
 import axios from 'axios'
 
-export const AppContext = React.createContext()
+// export const AppContext = React.createContext()
 
 
 class App extends Component {
@@ -119,9 +120,6 @@ class App extends Component {
         return modifiedItem.data
       })
     }
-  }
-  componentDidMount(){
-    
   }
   render() { 
     return ( 

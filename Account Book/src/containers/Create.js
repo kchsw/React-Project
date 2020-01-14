@@ -10,7 +10,7 @@ import { withRouter } from 'react-router-dom'
 
 const tabsText = [ TYPE_INCOME, TYPE_OUTCOME ]
 
-class Create extends Component {
+export class CreatePage extends Component {
     constructor(props) {
         super(props);
         const { items, categories } = props.data
@@ -40,11 +40,15 @@ class Create extends Component {
     }
     submitForm = (data, editMode) => {
       if(!editMode){
-        this.props.actions.createItem(data, this.state.selectedCategory.id)
+        this.props.actions.createItem(data, this.state.selectedCategory.id).then(() => {
+          this.props.history.push('/')
+        })
       }else{
-        this.props.actions.updateItem(data, this.state.selectedCategory.id)
+        this.props.actions.updateItem(data, this.state.selectedCategory.id).then(() => {
+          this.props.history.push('/')
+        })
       }
-      this.props.history.push('/')
+      
     }
     selectCategory = (category) => {
       this.setState({
@@ -97,5 +101,5 @@ class Create extends Component {
         );
     }
 } 
- 
-export default withRouter(WithContext(Create));
+
+export default withRouter(WithContext(CreatePage));

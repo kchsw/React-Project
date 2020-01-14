@@ -2,16 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import Hocks from './hocks/Hocks'
-import ReduxC from './hocks/ReduxC'
-// import HelloWord from './HelloWord'
+import HKApp from './Hooks'
+import TodoList from './Redux'
 import * as serviceWorker from './serviceWorker';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
-
-
-// ReactDOM.render(<App />, document.getElementById('root'));
-ReactDOM.render(<ReduxC />, document.getElementById('root'));
+ReactDOM.render(<TodoList />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
