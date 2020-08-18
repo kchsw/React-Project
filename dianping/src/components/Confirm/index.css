@@ -1,0 +1,41 @@
+.comfirm {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 300;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.comfirm__alert {
+    width: 280px;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #efefef;
+    z-index: 10000002;
+    text-align: center;
+}
+
+.comfirm__content {
+    padding: 20px;
+    border-bottom: solid 1px #efefef;
+}
+
+.comfirm__btns {
+    font-size: 14px;
+    height: 40px;
+    line-height: 40px;
+}
+
+.comfirm__btn {
+    color: #08c;
+    float: left;
+    width: 50%;
+    height: 100%;
+    box-sizing: border-box;
+}
+

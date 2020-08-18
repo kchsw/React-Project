@@ -1,0 +1,93 @@
+.likeItem {
+    display: flex;
+    padding: 11px 10px 11px 15px;
+}
+
+.likeItem__picContainer {
+    width: 100px;
+    flex-basis: 100px;
+    padding-right: 10px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.likeItem__pic {
+    width: 100%;
+    height: 90px;
+    display: block;
+}
+
+.likeItem__picTag {
+    font-size: 12px;
+    font-weight: 700;
+    color: #e5bf86;
+    position: absolute;
+    padding: 3px 7px;
+    background: #000;
+}
+.likeItem__content {
+    flex: 1;
+}
+
+.likeItem__shop {
+    font-size: 17px;
+    font-weight: 700;
+    color: #111;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.likeItem__product {
+    font-size: 13px;
+    color: #777;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-top: 9px;
+    padding-bottom: 13px;
+}
+
+.likeItem__detail {
+    display: flex;
+    justify-content: space-between;
+    height: 22px;
+    line-height: 22px;
+    padding-right: 4px;
+}
+
+
+.likeItem__currentPrice {
+    color: #f63;
+    font-size: 20px;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.likeItem__oldPrice {
+    color: #777;
+    font-size: 13px;
+    text-decoration: line-through;
+    margin-left: 10px;
+}
+
+.likeItem__currentPrice::before {
+    content: "\A5";
+    margin-right: 1px;
+}
+
+
+.likeItem__oldPrice::before {
+    content: "\A5";
+    margin-right: 1px;
+}
+
+
+.likeItem__sale {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+    color: #777;
+    line-height: 24px;
+}

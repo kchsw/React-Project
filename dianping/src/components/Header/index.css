@@ -1,0 +1,35 @@
+.header {
+    height: 45px;
+    line-height: 45px;
+    padding: 0 10px;
+    text-align: center;
+    background-color: #f0f0f0;
+    position: relative;
+    color: #f63;
+    z-index: 300;
+}
+.header__back {
+    padding-left: 16px;
+    position: absolute;
+    left: 10px;
+    color: #333;
+    font-size: 14px;;
+}
+.header__back::before {
+    width: 12px;
+    height: 12px;
+    border: 3px solid #f63;
+    border-top: none;
+    border-right: none;
+    transform: rotate(45deg);
+    position: absolute;
+    left: 0;
+    top: 50%;
+    display: block;
+    content: '';
+    margin-top: -8px;
+}
+.header__title {
+    color: #333;
+    font-size: 16px;
+}

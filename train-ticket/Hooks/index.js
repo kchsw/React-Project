@@ -77,7 +77,34 @@ function HKApp() {
             </Suspense> 
         </BatteryContext.Provider >
         </onLineContext.Provider>
-    )
+    ) 
 }
 
 export default HKApp
+
+// Context 用于跨组件传递数据 
+// 3种接受方式 1. Comsumer 2.contextType 3.useContext
+//memo 对应shouldComponentShouldUpdate 决定组件是否重新渲染提高性能
+// shouldComponentShouldUpdate(nextProps, nextState) {
+//     return !(nextProps.value === this.props.value )
+// }
+// const child = memo(function child(props) {
+//     return (
+//         <></>
+//     )
+// })
+// useEffect(() => {
+    // return  () => {}
+// }) 每次都会执行 包括回调清理函数
+// useEffect(() => {
+    // return  () => {}
+// }, []) 只会执行一次 回调清理函数相当于componentWillUnmount
+
+// }) 每次都会执行
+// useEffect(() => {
+
+// }, [a]) a的值发生变化时执行
+// useMemo 定义一段函数逻辑是否重复执行
+
+// useCallback 确保传入函数的句柄不发生变化
+//useRef 获取dom或子组件 同步不同渲染周期之间需要共享的数据
